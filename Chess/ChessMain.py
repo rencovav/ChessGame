@@ -24,10 +24,25 @@ def main():
     gs = ChessEngine.GameState()  # creating a game state object
     load_images()
     running = True
+    sq_selected = ()
+    player_clicks = []
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = location[0]//SQ_SIZE
+                row = location[1]//SQ_SIZE
+                if sq_selected == (row, col):
+                    sq_selected = () # deselect
+                    player_clicks = []
+                else:
+                    sq_selected = (row, col)
+                    player_clicks.append(sq_selected)
+                if len(player_clicks) == 2:
+
+
         draw_game_state(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
@@ -45,7 +60,11 @@ def draw_board(screen):
 
 
 def draw_pieces(screen, board):
-    pass
+    for row in range(DIMENSION):
+        for column in range(DIMENSION):
+            piece = board[row][column]
+            if piece != "--":
+                screen.blit(IMAGES[piece],p.Rect(column*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 
 

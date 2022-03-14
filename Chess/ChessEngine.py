@@ -22,3 +22,8 @@ class GameState():
         ]
         self.whiteToMove = True
         self.moveLog = []
+
+class Move():
+    def __init__(self, start_sq, end_sq, board):
+        # to be implemented later
+        pass
