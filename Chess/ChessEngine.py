@@ -21,13 +21,28 @@ class GameState:
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
         ]
-        self.whiteToMove = True
-        self.moveLog = []
-    def make_move(self,move):
+        self.white_to_move = True
+        self.move_log = []
+
+    def make_move(self, move):
         self.board[move.start_row][move.start_col] = "--"
         self.board[move.end_row][move.end_col] = move.piece_moved
-        self.moveLog.append(move)
-        self.whiteToMove = not self.whiteToMove # switch to black
+        self.move_log.append(move)
+        self.white_to_move = not self.white_to_move  # switch to black
+
+    def undo_move(self):
+        if len(self.move_log) != 0:
+            move = self.move_log.pop()
+            self.board[move.start_row][move.start_col] = move.piece_moved
+            self.board[move.end_row][move.end_col] = move.piece_captured
+            self.white_to_move = not self.white_to_move
+
+    def get_valid_moves(self):
+        pass
+
+    def get_all_possible_moves(self):
+        pass
+
 
 
 class Move:
@@ -47,6 +62,5 @@ class Move:
     def get_chess_notation(self):
         return self.get_rank_file(self.start_row, self.start_col) + self.get_rank_file(self.end_row, self.end_col)
 
-    def get_rank_file(self,row,col):
+    def get_rank_file(self, row, col):
         return self.cols_to_files[col] + self.rows_to_ranks[row]
-
