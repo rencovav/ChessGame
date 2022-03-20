@@ -38,9 +38,24 @@ class GameState:
             self.white_to_move = not self.white_to_move
 
     def get_valid_moves(self):
-        pass
+        return self.get_all_possible_moves()
 
     def get_all_possible_moves(self):
+        moves = []
+        for row in range(len(self.board)):
+            for col in range(len(self.board[row])):
+                turn = self.board[row][col][0]
+                if (turn == "w" and self.white_to_move) and (turn == "b" and not self.white_to_move):
+                    piece = self.board[row][col][1]
+                    if piece == "p":
+                        self.get_pawn_moves(row, col, moves)
+                    elif piece == "R":
+                        self.get_rock_moves(row, col, moves)
+
+    def get_pawn_moves(self, row, col, moves):
+        pass
+
+    def get_rock_moves(self, row, col, moves):
         pass
 
 
@@ -57,6 +72,13 @@ class Move:
         self.end_col = end_sq[1]
         self.piece_moved = board[self.start_row][self.start_col]
         self.piece_captured = board[self.end_row][self.end_col]
+        self.move_id = self.start_row * 1000 + self.start_col * 100 + self.end_row * 10 + self.end_col
+        print(self.move_id)
+
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.move_id == other.move_id
+        return False
 
     def get_chess_notation(self):
         return self.get_rank_file(self.start_row, self.start_col) + self.get_rank_file(self.end_row, self.end_col)
