@@ -21,6 +21,8 @@ class GameState:
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
         ]
+        self.move_functions = {"p": self.get_pawn_moves, "R": self.get_rook_moves, "N": self.get_knight_moves,
+                               "B": self.get_bishop_moves, "Q": self.get_queen_moves, "K": self.get_king_moves}
         self.white_to_move = True
         self.move_log = []
 
@@ -47,15 +49,37 @@ class GameState:
                 turn = self.board[row][col][0]
                 if (turn == "w" and self.white_to_move) and (turn == "b" and not self.white_to_move):
                     piece = self.board[row][col][1]
-                    if piece == "p":
-                        self.get_pawn_moves(row, col, moves)
-                    elif piece == "R":
-                        self.get_rock_moves(row, col, moves)
+                    self.move_functions[piece](row, col, moves)
+        return moves
 
     def get_pawn_moves(self, row, col, moves):
+        if self.white_to_move:
+            if self.board[row - 1][col] == "--":
+                moves.append(Move((row, col), (row - 1, col), self.board))
+                if row == 6 and self.board[row - 2][col] == "--":
+                    moves.append(Move((row, col), (row - 2, col), self.board))
+            if col - 1 >= 0:
+                if self.board[row - 1][col - 1][0] == "b":
+                    moves.append(Move((row, col), (row - 1, col - 1), self.board))
+            if col + 1 <= 7:
+                if self.board[row - 1][col + 1][0] == "b":
+                    moves.append(Move((row, col), (row - 1, col + 1), self.board))
+        else:  # black pawn moves
+            pass
+
+    def get_rook_moves(self, row, col, moves):
         pass
 
-    def get_rock_moves(self, row, col, moves):
+    def get_knight_moves(self, row, col, moves):
+        pass
+
+    def get_king_moves(self, row, col, moves):
+        pass
+
+    def get_queen_moves(self, row, col, moves):
+        pass
+
+    def get_bishop_moves(self, row, col, moves):
         pass
 
 
